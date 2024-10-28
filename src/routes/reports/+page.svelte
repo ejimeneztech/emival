@@ -9,6 +9,7 @@
         <th>Store Name</th>
         <th>Store Number</th>
         <th>Product Name</th>
+        <th>Product ID</th>
         <th>Amount</th>
         <th>Total $</th>
       </tr>
@@ -18,6 +19,7 @@
         <td>Cardenas</td>
         <td>#20</td>
         <td>Guajillo</td>
+        <td>4322</td>
         <td>50</td>
         <td>$5000</td>
       </tr>
