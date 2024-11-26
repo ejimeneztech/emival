@@ -9,6 +9,8 @@
         loading = false;
     });
 
+    console.log(data);
+
 </script>
 
 <h1>Reports</h1>

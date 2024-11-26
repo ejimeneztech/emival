@@ -1,22 +1,14 @@
 // src/routes/api/data/+server.js
-import pkg from 'pg';
-const { Client } = pkg;
+import { supabase } from '$lib/supabase'; // import your Supabase client
 
 export async function GET() {
-  const client = new Client({ connectionString: process.env.DATABASE_URL });
-
-  try {
-    await client.connect();
-    const result = await client.query('SELECT * FROM your_table');
-    return new Response(JSON.stringify(result.rows), {
-      headers: { 'Content-Type': 'application/json' },
-    });
-  } catch (error) {
-    console.error('Database error:', error);
-    return new Response(JSON.stringify({ error: 'Failed to fetch data' }), {
-      status: 500,
-    });
-  } finally {
-    await client.end();
+  // Query data from Supabase
+  const { data, error } = await supabase.from('Stores').select('*');
+  
+  if (error) {
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
   }
+
+  // Return data as JSON
+  return new Response(JSON.stringify(data), { status: 200 });
 }
