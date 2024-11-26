@@ -1,7 +1,23 @@
-<h1>Reports</h1>
-<p>Add drop down for store name, number, date</p>
+<script>
+    import {onMount} from 'svelte';
+    export let data;
+    let loading = true;
 
-<h2>Total Monthly Sales</h2>
+    const {report} = data;
+
+    onMount(() => {
+        loading = false;
+    });
+
+</script>
+
+<h1>Reports</h1>
+
+
+<h2>Total Sales</h2>
+
+<label for="start">Fecha:</label><br>
+<input type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" max="2018-12-31" /><br><br>
 
 <table>
     <thead>
