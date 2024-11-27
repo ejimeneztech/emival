@@ -4,6 +4,7 @@
 
 <label for="cars">Select Store:</label>
 
+<!-- load stores in db -->
 <select name="cars" id="cars">
   <option value="volvo">Cardenas #2</option>
   <option value="saab">Superior #4</option>
