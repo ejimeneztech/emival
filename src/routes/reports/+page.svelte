@@ -19,7 +19,7 @@
 <h2>Total Sales</h2>
 
 <label for="start">Fecha:</label><br>
-<input type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" max="2018-12-31" /><br><br>
+<input type="date" id="start" name="trip-start" value="2024-12-01" min="2024-11-01" max="2025-12-31" /><br><br>
 
 <table>
   <thead>

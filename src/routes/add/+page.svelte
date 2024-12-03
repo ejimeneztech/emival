@@ -55,7 +55,7 @@
 {#if storeNames.length}
   <select name="stores" id="stores" bind:value={selectedStore} required>
     {#each storeNames as store}
-      <option value="{store['Store Name']}">{store['Store Name']}</option>
+      <option value="{store['Store Name']} #{store['Number']}">{store['Store Name']} #{store['Number']}</option>
     {/each}
   </select>
 {:else}
