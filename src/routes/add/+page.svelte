@@ -1,23 +1,77 @@
 <script>
+  import { onMount } from 'svelte';
 
+  let storeNames = [];
+  let error = '';
+  let selectedStore = '';
+  let productName = '';
+  let quantity = '';
+
+  // Fetch store names on mount
+  onMount(async () => {
+    try {
+      const res = await fetch('/api/store-names');
+      if (!res.ok) throw new Error('Failed to fetch store names');
+      storeNames = await res.json();
+    } catch (err) {
+      error = err.message;
+    }
+  });
+
+  // Handle form submission
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const payload = {
+      storeName: selectedStore,
+      productName,
+      quantity: parseInt(quantity, 10),
+    };
+
+    try {
+      const res = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error);
+      }
+
+      alert('Data submitted successfully!');
+      // Optionally, clear the form
+      selectedStore = '';
+      productName = '';
+      quantity = '';
+    } catch (err) {
+      alert(`Error: ${err.message}`);
+    }
+  };
 </script>
 
-<label for="cars">Select Store:</label>
+<label for="stores">Select Store:</label>
+{#if storeNames.length}
+  <select name="stores" id="stores" bind:value={selectedStore} required>
+    {#each storeNames as store}
+      <option value="{store['Store Name']}">{store['Store Name']}</option>
+    {/each}
+  </select>
+{:else}
+  <p>Loading store names...</p>
+{/if}
 
-<!-- load stores in db -->
-<select name="cars" id="cars">
-  <option value="volvo">Cardenas #2</option>
-  <option value="saab">Superior #4</option>
-  <option value="mercedes">El Torito</option>
-  <option value="audi">Walmart</option>
-</select>
+<form on:submit={handleSubmit}>
+  <label for="pname">Producto:</label><br />
+  <input type="text" id="pname" name="pname" bind:value={productName} required /><br />
 
-<form action="/action_page.php">
-    <label for="pname">Producto:</label><br>
-    <input type="text" id="pname" name="pname" value="Pasilla"><br>
-    <label for="qnty">Cantidad:</label><br>
-    <input type="text" id="qnty" name="qnty" value="400"><br><br>
-    <label for="start">Fecha:</label><br>
-    <input type="date" id="start" name="trip-start" value="2018-07-22" min="2018-01-01" max="2018-12-31" /><br><br>
-    <input type="submit" value="Submit">
-  </form>
+  <label for="qnty">Cantidad:</label><br />
+  <input type="number" id="qnty" name="qnty" bind:value={quantity} required /><br /><br />
+
+  <input type="submit" value="Submit" />
+</form>
+
+{#if error}
+  <p style="color: red;">{error}</p>
+{/if}
