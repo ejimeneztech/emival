@@ -4,14 +4,25 @@
 
   // Assuming 'data' contains the correct structure, you can access 'stores' like this:
   const stores = data?.props?.stores || [];
+  let filteredStores = []; // Stores filtered based on the selected date
+
+  // Date filtering variables
+  let selectedDate = '';
 
   // Set loading to false once the component is mounted
   import { onMount } from 'svelte';
   onMount(() => {
     loading = false;
+    filteredStores = stores; // Initialize with all stores
   });
 
-  console.log(stores);  // Check if the stores are being loaded correctly
+  // Update filteredStores when selectedDate changes
+  $: if (selectedDate) {
+    filteredStores = stores.filter(store => {
+      const storeDate = new Date(store.created_at).toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+      return storeDate === selectedDate;
+    });
+  }
 </script>
 
 <h1>Reports</h1>
@@ -19,7 +30,13 @@
 <h2>Total Sales</h2>
 
 <label for="start">Fecha:</label><br>
-<input type="date" id="start" name="trip-start" value="2024-12-01" min="2024-11-01" max="2025-12-31" /><br><br>
+<input 
+  type="date" 
+  id="start" 
+  bind:value={selectedDate} 
+  min="2024-11-01" 
+  max="2025-12-31" 
+/><br><br>
 
 <table>
   <thead>
@@ -31,7 +48,7 @@
     </tr>
   </thead>
   <tbody>
-    {#each stores as store}
+    {#each filteredStores as store}
       <tr>
         <td>{store["Store Name"]}</td>
         <td>{store["Product Name"]}</td>
